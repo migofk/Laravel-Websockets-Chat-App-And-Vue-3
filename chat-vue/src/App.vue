@@ -8,8 +8,8 @@ import { useHead } from '@vueuse/head'
 export default ({
   setup() {
     const siteData = reactive({
-      title: `My website`,
-      description: `My beautiful website`,
+      title: `My Chat App`,
+      description: `My beautiful Chat App`,
     })
     useHead({
       // Can be static or computed

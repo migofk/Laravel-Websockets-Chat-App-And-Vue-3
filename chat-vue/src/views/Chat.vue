@@ -2,7 +2,7 @@
 <main class="container min-h-content mb-3 mt-5">
 		<h1 class="h3 mb-3"><i class="bi bi-chat-left-dots-fill"></i> Messages</h1>
 
-		<div class="card">
+		<div class="card chat-card">
 			<div class="row g-0">
 				<ChatSidebar  @renderChat="renderChat" />
 				<ChatBox v-if="startChat"  :chat_id="chatId" />

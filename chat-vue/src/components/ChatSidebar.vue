@@ -17,7 +17,7 @@
 </div>
 
 
-<a v-for="chat in chats" @click="OpentChat(chat.id)" :key="chat.id"  class="list-group-item list-group-item-action border-0 border-bottom ps-3 py-3" >
+<a v-for="chat in chats" @click="OpentChat(chat.id)" :key="chat.id"  class="list-group-item list-group-item-action border-0  ps-3 py-3" >
     <div class="d-flex align-items-start">
         <img src="http://localhost:5173/img/avatar-7.png" class="rounded-circle me-1" alt="Vanessa Tucker" width="40" height="40">
         <div class="flex-grow-1 ml-3 fw-bold">

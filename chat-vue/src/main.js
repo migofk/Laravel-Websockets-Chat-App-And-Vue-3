@@ -7,6 +7,7 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import router from "./router"
 import store from "./store"
 import { createHead } from '@vueuse/head'
+import "./echo"
 const head = createHead()
 
 

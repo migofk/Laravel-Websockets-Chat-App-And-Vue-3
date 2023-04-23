@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+  <nav class="navbar navbar-expand-lg  navbar-dark bg-dark" aria-label="Main navigation">
 <div class="container-fluid">
   <router-link :to="{ name: 'Home' }" class="navbar-brand d-flex align-items-center">
         <i class="bi bi-box2-heart h1 me-1"></i>

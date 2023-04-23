@@ -2,6 +2,9 @@
     min-height: calc(100vh - 82px - 148px);
 }
 
+.chat-card{
+    min-height: 70vh;
+}
 .chat-online {
     color: #34ce57
 }
@@ -13,7 +16,8 @@
 .chat-messages {
     display: flex;
     flex-direction: column;
-    max-height: 800px;
+    min-height: 400px;
+    max-height: 500px;
     overflow-y: scroll
 }
 .messsage-container{
