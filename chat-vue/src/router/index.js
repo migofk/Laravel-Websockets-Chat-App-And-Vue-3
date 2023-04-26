@@ -35,12 +35,14 @@ const routes = [
             },
         ]
     },
-]   
+]
+   
 const router = createRouter({
     history: createWebHistory(),
     routes,
 })
 
+//if the user is not logged, redirecting to login page
 const except = ['Register' ]
 router.beforeEach((to, from, next) => {
   let token = store.state.token

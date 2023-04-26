@@ -7,6 +7,7 @@ import {computed, reactive } from 'vue'
 import { useHead } from '@vueuse/head'
 export default ({
   setup() {
+    //creating dynamic meta tags
     const siteData = reactive({
       title: `My Chat App`,
       description: `My beautiful Chat App`,
@@ -24,6 +25,7 @@ export default ({
     })
   },
   async mounted() {
+    //loading the store data when the app start
    await this.$store.commit('initialiseStore')
   },
 })

@@ -25,7 +25,7 @@
 								<div class="flex-shrink-1 message-box rounded py-2 px-3 mx-2">
 									<div class="font-weight-bold mb-1">{{ message.sender.first_name }}</div>
 									{{  message.message }} 
-                                    <div class="text-muted small text-nowrap mt-2">{{  message.created_at }} - {{  message.data.status }}</div>
+                                    <div class="text-muted small text-nowrap mt-2">{{ moment(message.created_at).format("DD-MM-yy,   h:m a") }} - {{  message.data.status }}</div>
 								</div>
 							</div>
 						</div>
@@ -43,11 +43,15 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 export default {
 	props:['chat_id'],
 	setup() {
 		
 	},
+	created: function () {
+    this.moment = moment;
+    },
 	data(){
 		return{
 			messages:[],
@@ -58,6 +62,7 @@ export default {
 		}
 	},
 	methods:{
+		// to auto-scroll to the new received  message
 	  scrollToLastMessage(){
 		this.$nextTick(() =>{
 			let items = this.$refs.messsageContainers;
@@ -72,8 +77,8 @@ export default {
 			}
 		})
 	},
+	//to get the chat data when we open a chat
 	async  getData(){
-		
       let url =import.meta.env.VITE_BACKEND_URL+'/chat/get-chat-by-id/'+this.chat_id
       axios
       .get(url,
@@ -90,6 +95,8 @@ export default {
 		this.startWebSocket()
       });
     },
+
+	// to send new message
 	async onSubmit() {
        this.isSendingForm = true;
        axios.post(
@@ -113,8 +120,9 @@ export default {
           this.isSendingForm = false;
         });
     },
-	async startWebSocket(){
 	
+	//to subscribe to the chat websocket channel
+	async startWebSocket(){
 		console.log('startWebSocket',this.chat_id)
 		window.Echo.join('chat.'+this.chat_id)
 		.here(users => {
@@ -126,6 +134,7 @@ export default {
 		.leaving(user => {
 			this.users = this.users.filter(u => (u.id !== user.id));
 		}).listen('ChatMessageSent', (e) => {
+			// for  listening to ChatMessageSent event from the server
 			this.messages.push(e.message)
 			this.scrollToLastMessage();
 			if (this.$store.state.id != e.message.sender.id){
@@ -140,36 +149,19 @@ export default {
 				
 			}
 		}).listen('ChatMessageStatus', (e) => {
+			// listening to ChatMessageStatus event from the server
 			this.messages.find(o => o.id ==e.message.id ).data.status =  e.message.data.status
 		});
 	}  
 	},
 	watch: {
-       // call the method if the route changes
+       // call the method if the chat_id changes in chat.vue
       'chat_id': {
          handler: 'getData',
          immediate: true // runs immediately with mount() instead of calling method on mount hook
     },
-   /*'$route': {
-         handler: 'startWebSocket',
-         immediate: true // runs immediately with mount() instead of calling method on mount hook
-    },*/
 
   },
-  mounted(){
-   // this.getData()
 
-	/* window.Echo.private('chat.'+this.chat_id).listen('ChatMessageSent',(e)=>{
-       console.log('go private');
-       //code for displaying the serve data
-       console.log('Echo Echo',e); // the data from the server
-	   this.messages.push(e.message)
-	   this.scrollToLastMessage();
-    })*/
-	
-	
-  },
-  unmounted(){
-  }
 }
 </script>

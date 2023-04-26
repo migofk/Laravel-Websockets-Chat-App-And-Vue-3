@@ -3,11 +3,8 @@ import { reactive } from "vue";
 import Echo from "laravel-echo"
 import Pusher from "pusher-js";
 window.Pusher = Pusher;
-export const state = reactive({
-  connected: false,
-});
 
-
+//connecting to the serve with Authorization
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_WEBSOCKETS_KEY,
@@ -16,7 +13,7 @@ window.Echo = new Echo({
     cluster: "mt1",
     forceTLS: false,
     disableStats: true,
-    authEndpoint :'http://127.0.0.1:8000/api/broadcasting/auth',
+    authEndpoint :import.meta.env.VITE_BACKEND_URL+'/broadcasting/auth',
     auth:{
         headers: {
             Authorization: 'Bearer '+localStorage.getItem('token'), 
@@ -24,11 +21,3 @@ window.Echo = new Echo({
     },
  
 });
-/*
-window.Echo.connector.socket.on('connect', function(){
-    state.connected = true;
-})
-
-window.Echo.connector.socket.on('disconnect', function(){
-    state.connected = false;
-})*/

@@ -25,6 +25,10 @@ export default {
 		}
 	},
 	methods: {
+    /*
+	* To open a new chat 
+	*we pass this method to ChatSidebar component
+	*/
     renderChat(chat_id) {
      this.chatId = null
 	 this.chatId = chat_id

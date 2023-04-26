@@ -9,7 +9,7 @@ export default createStore({
     stateLoaded: false
   },
   mutations: {
-
+    //getting saved data from the web storage
    async initialiseStore(state) {
 
          if(localStorage.getItem('token')){
@@ -30,6 +30,8 @@ export default createStore({
          state.stateLoaded = true
          return true;
     },
+
+    //saving the login data from the login request 
     saveLogin(state,LoginData){
       state.token =LoginData.token;
       state.name =LoginData.name;
@@ -42,6 +44,7 @@ export default createStore({
     
     },
 
+    //remove all the data from web storage and store for logging out
     Logout(state){
       state.token ="";
       state.name ="";

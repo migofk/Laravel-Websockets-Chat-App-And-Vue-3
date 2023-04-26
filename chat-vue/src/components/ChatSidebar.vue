@@ -23,7 +23,6 @@
         <div class="flex-grow-1 ml-3 fw-bold">
             <span v-for="participant in chat.participants" :key="participant.id">
                 <span v-if="$store.state.id != participant.id" >{{ participant.first_name }} {{ participant.last_name }}</span>
-        <!--    <div v-if="$store.state.id != participant.id" class="small"><i class="bi bi-circle-fill chat-online"></i> Online</div>-->
            </span>
         </div>
     </div>
@@ -34,8 +33,8 @@
 <script>
 import axios from 'axios'
 export default {
-    //props:['chat_id'],
-    emits: ["renderChat"],
+   // to user the renderChat message from the parent component chat.vue
+  emits: ["renderChat"],
 	data(){
 		return{
       chat_id:null,
@@ -47,41 +46,39 @@ export default {
 		}
 	},
   methods:{
-     tryThis() {
-      console.log("trying");
-      
-    },
+    // to start open a chat in ChatBox.vue
    async OpentChat(chat_id){
+        // disconnect the current chat channel
         await window.Echo.leave('chat.'+this.chat_id)
-        console.log(this.chat_id)
+
+        //open the new chat
         this.chat_id = chat_id
         this.$emit("renderChat", chat_id);
     },
-
+   
+    // to search users by email
    searchUsers() {
-       this.isSendingForm = true;
-       axios.post(
+      this.isSendingForm = true;
+      axios.post(
         this.$store.state.backendUrl+'/chat/search-user',{email:this.searchEmail}, 
         {
-			headers: {
-			"Content-Type": "application/json",
-			'Authorization': 'Bearer ' + this.$store.state.token,
-			}
-    	})
+        headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer ' + this.$store.state.token,
+        }
+      })
       .then((response) => {
-        console.log(response);
-        this.isSendingForm = false;
-        this.users = response.data.users
-    //this.messages.push(response.data.message)
-  
+          console.log(response);
+          this.isSendingForm = false;
+          this.users = response.data.users
       })
       .catch( (error) => {
-        console.log(error);
-      /*  this.ShowError=true;
-        this.errorMgs = error.response.data.error;*/
-        this.isSendingForm = false;
+          console.log(error);
+          this.isSendingForm = false;
       });
     },
+
+    // to get the user's chats to be displayed on the sidbar
     getData(){
       let url =import.meta.env.VITE_BACKEND_URL+'/chat/get-chats'
       axios
@@ -96,6 +93,9 @@ export default {
 		    this.chats = response.data.chats
       });
     },
+
+
+  // to start a chat with  user
   async  onSubmit() {
        this.isSendingForm = true;
        let user = this.users.find(o => o.email === this.searchEmail);
@@ -110,29 +110,17 @@ export default {
 			'Authorization': 'Bearer ' + this.$store.state.token,
 			}
     	})
-        .then((response) => {
-          console.log(response);
-          this.isSendingForm = false;
-          window.Echo.leave('chat.'+this.$route.query.chat_id)
-          this.$router.push({ name: 'Chat', query: { chat_id: response.data.chat.id }})
-		  //this.messages.push(response.data.message)
-		
-        })
-        .catch( (error) => {
-          console.log(error);
-        /*  this.ShowError=true;
-          this.errorMgs = error.response.data.error;*/
-          this.isSendingForm = false;
-        });
+      .then((response) => {
+         // to start a chat with the user
+        this.isSendingForm = false;
+        this.OpentChat(response.data.chat.id)
+      })
+      .catch( (error) => {
+        console.log(error);
+        this.isSendingForm = false;
+      });
     },
     },
-    watch: {
-       // call the method if the route changes
-       '$route': {
-         handler: 'getData',
-         immediate: true // runs immediately with mount() instead of calling method on mount hook
-    }
-  },
     mounted(){
     this.getData()
   }
